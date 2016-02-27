@@ -7,17 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 
 import com.ortal.bouncing.stars.R;
 import com.ortal.bouncing.stars.activities.StarsActivity;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MainFragment extends Fragment {
     Button submitButton;
-    EditText speed, amount;
+    MaterialEditText speed, amount;
 
     public MainFragment() {
     }
@@ -28,15 +28,17 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         submitButton = (Button) view.findViewById(R.id.submit_button);
-        speed = (EditText) view.findViewById(R.id.speed);
-        amount = (EditText) view.findViewById(R.id.amount);
+        speed = (MaterialEditText) view.findViewById(R.id.speed);
+        amount = (MaterialEditText) view.findViewById(R.id.amount);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = StarsActivity.createIntent(getActivity(),
-                        Integer.valueOf(speed.getText().toString()), Integer.valueOf(amount.getText().toString()));
-                startActivity(myIntent);
+                if (speed.length() > 0 && amount.length() > 0 && speed.length() < 4 && amount.length() < 4) {
+                    Intent myIntent = StarsActivity.createIntent(getActivity(),
+                            Integer.valueOf(speed.getText().toString()), Integer.valueOf(amount.getText().toString()));
+                    startActivity(myIntent);
+                }
             }
         });
 
