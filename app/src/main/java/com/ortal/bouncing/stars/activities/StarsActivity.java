@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.SurfaceView;
 import android.view.View;
@@ -13,9 +13,8 @@ import android.view.View;
 import com.ortal.bouncing.stars.R;
 import com.ortal.bouncing.stars.customviews.Bounce;
 
-public class StarsActivity extends ActionBarActivity {
+public class StarsActivity extends AppCompatActivity {
 
-    private static final String TAG = "StarsActivity:";
     private static final String EXTRA_SPEED = "speed";
     private static final String EXTRA_AMOUNT = "amount";
     private Resources resources;
@@ -42,8 +41,9 @@ public class StarsActivity extends ActionBarActivity {
             mSpeed = getIntent().getIntExtra(EXTRA_SPEED, 1);
             mAmount = getIntent().getIntExtra(EXTRA_AMOUNT, 1);
         }
-
+        //use costume view Bounce manager - responsible of moving the elements and draw them
         view = new Bounce(this, mSpeed, mAmount);
+        // use the GPU instead of the CPU
         view.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         super.onCreate(savedInstanceState);
         setContentView(view.getRootView());

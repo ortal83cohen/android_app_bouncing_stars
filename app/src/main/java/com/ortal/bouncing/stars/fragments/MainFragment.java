@@ -34,6 +34,7 @@ public class MainFragment extends Fragment {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // validate input between 1-999
                 if (speed.length() > 0 && amount.length() > 0 && speed.length() < 4 && amount.length() < 4) {
                     Intent myIntent = StarsActivity.createIntent(getActivity(),
                             Integer.valueOf(speed.getText().toString()), Integer.valueOf(amount.getText().toString()));

@@ -48,15 +48,17 @@ public class Bounce extends SurfaceView {
             public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
                 viewSize = new PointF(width, height);
                 starItems = new ArrayList<>();
-
+                // create the amount of elements
                 for (int i = 0; i < amount; i++) {
                     starItems.add(new StarItem(viewSize));
                 }
             }
 
         });
+        //getting windows size
         Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 
+        // calculating length of frame - Second / RefreshRate(number of refresh to Second) = length of frame
         frameTime = Math.round(1000 / display.getRefreshRate());
 
         handler = new Handler();
@@ -82,6 +84,7 @@ public class Bounce extends SurfaceView {
         super.onTouchEvent(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
+                //pick the correct star from the stars list and save its index
                 int i = 0;
                 for (StarItem starItem : starItems) {
                     if (starItem.touch(event.getX(), event.getY())) {
@@ -109,7 +112,7 @@ public class Bounce extends SurfaceView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
+        // draw all stars
         for (StarItem starItem : starItems) {
             canvas.drawPath(starItem.getPath(), starItem.getPaint());
         }

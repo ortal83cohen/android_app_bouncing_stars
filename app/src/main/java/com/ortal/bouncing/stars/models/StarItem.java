@@ -13,7 +13,6 @@ public class StarItem {
 
     private PointF position;
     private PointF viewSize;
-    private float radius;
     private Paint paint;
     private boolean directionX;
     private boolean directionY;
@@ -26,7 +25,6 @@ public class StarItem {
         this.paint = new Paint();
         this.paint.setStyle(Paint.Style.FILL);
         this.paint.setARGB(255, random.nextInt(200), random.nextInt(200), random.nextInt(200));
-        this.radius = DEFAULT_RADIUS;
         this.directionX = random.nextBoolean();
         this.directionY = random.nextBoolean();
         path = new Path();
@@ -49,16 +47,16 @@ public class StarItem {
         } else {
             position.y = position.y - speed;
         }
-        if (position.y + radius >= viewSize.y - speed - 2) {
+        if (position.y + DEFAULT_RADIUS >= viewSize.y - speed - 2) {
             directionY = false;
         }
-        if (position.y - radius <= speed + 2) {
+        if (position.y - DEFAULT_RADIUS <= speed + 2) {
             directionY = true;
         }
-        if (position.x + radius >= viewSize.x - speed - 2) {
+        if (position.x + DEFAULT_RADIUS >= viewSize.x - speed - 2) {
             directionX = false;
         }
-        if (position.x - radius <= speed + 2) {
+        if (position.x - DEFAULT_RADIUS <= speed + 2) {
             directionX = true;
         }
         updateStar();
@@ -70,37 +68,40 @@ public class StarItem {
 
     private void updateStar() {
         int numOfPt = 5;
-        float innerRadius = this.radius / 2;
+        float innerDEFAULT_RADIUS = this.DEFAULT_RADIUS / 2;
         double section = 2.0 * Math.PI / numOfPt;
 
         path.reset();
         path.moveTo(
-                (float) (position.x + radius * Math.cos(0)),
-                (float) (position.y + radius * Math.sin(0)));
+                (float) (position.x + DEFAULT_RADIUS * Math.cos(0)),
+                (float) (position.y + DEFAULT_RADIUS * Math.sin(0)));
         path.lineTo(
-                (float) (position.x + innerRadius * Math.cos(0 + section / 2.0)),
-                (float) (position.y + innerRadius * Math.sin(0 + section / 2.0)));
+                (float) (position.x + innerDEFAULT_RADIUS * Math.cos(0 + section / 2.0)),
+                (float) (position.y + innerDEFAULT_RADIUS * Math.sin(0 + section / 2.0)));
 
         for (int i = 1; i < numOfPt; i++) {
             path.lineTo(
-                    (float) (position.x + radius * Math.cos(section * i)),
-                    (float) (position.y + radius * Math.sin(section * i)));
+                    (float) (position.x + DEFAULT_RADIUS * Math.cos(section * i)),
+                    (float) (position.y + DEFAULT_RADIUS * Math.sin(section * i)));
             path.lineTo(
-                    (float) (position.x + innerRadius * Math.cos(section * i + section / 2.0)),
-                    (float) (position.y + innerRadius * Math.sin(section * i + section / 2.0)));
+                    (float) (position.x + innerDEFAULT_RADIUS * Math.cos(section * i + section / 2.0)),
+                    (float) (position.y + innerDEFAULT_RADIUS * Math.sin(section * i + section / 2.0)));
         }
         path.close();
     }//updateStar
 
     public boolean touch(float x, float y) {
-        return Math.abs(position.x - x) < radius && Math.abs(position.y - y) < radius;
+        //return true if the point is inside the star aria (actually aria= circle)
+        return Math.abs(position.x - x) < DEFAULT_RADIUS && Math.abs(position.y - y) < DEFAULT_RADIUS;
     }
 
     public void moveManual(float x, float y) {
+        // determinate the direction (after moveManual will done)
         if (x != 0 || y != 0) {
             directionX = (position.x - x < 0);
             directionY = (position.y - y < 0);
         }
+        // determinate star position
         position.x = x;
         position.y = y;
 
