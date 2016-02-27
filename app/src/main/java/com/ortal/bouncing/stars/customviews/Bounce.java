@@ -16,13 +16,14 @@ import java.util.ArrayList;
 
 public class Bounce extends SurfaceView {
 
-    private final int FRAME_TIME;
+    private static final int NO_TOUCHED_STAR = -1;
+    private final int frameTime;
     private SurfaceHolder holder;
     private Handler handler;
     private Runnable run;
     private PointF viewSize;
     private ArrayList<StarItem> starItems;
-    private int touchedStar = -1;
+    private int touchedStar = NO_TOUCHED_STAR;
 
 
     public Bounce(Context context, final int speed, final int amount) {
@@ -56,7 +57,7 @@ public class Bounce extends SurfaceView {
         });
         Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 
-        FRAME_TIME = Math.round(1000 / display.getRefreshRate());
+        frameTime = Math.round(1000 / display.getRefreshRate());
 
         handler = new Handler();
 
@@ -92,13 +93,11 @@ public class Bounce extends SurfaceView {
                 break;
             }
             case MotionEvent.ACTION_UP: {
-                if (touchedStar >= 0) {
-                    touchedStar = -1;
-                }
+                touchedStar = NO_TOUCHED_STAR;
                 break;
             }
             case MotionEvent.ACTION_MOVE: {
-                if (touchedStar >= 0) {
+                if (touchedStar != NO_TOUCHED_STAR) {
                     starItems.get(touchedStar).moveManual(event.getX(), event.getY());
                 }
                 break;
@@ -115,7 +114,7 @@ public class Bounce extends SurfaceView {
             canvas.drawPath(starItem.getPath(), starItem.getPaint());
         }
 
-        handler.postDelayed(run, FRAME_TIME);
+        handler.postDelayed(run, frameTime);
     }
 
 

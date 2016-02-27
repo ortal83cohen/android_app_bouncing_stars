@@ -7,6 +7,7 @@ import android.graphics.PointF;
 import java.util.Random;
 
 public class StarItem {
+    private static final float DEFAULT_RADIUS = 150;
     Path path;
 
 
@@ -20,11 +21,12 @@ public class StarItem {
     public StarItem(PointF viewSize) {
         Random random = new Random();
         this.viewSize = viewSize;
-        this.position = new PointF(random.nextFloat() * (viewSize.x - 400) + 200, random.nextFloat() * (viewSize.y - 400) + 200);
+        this.position = new PointF(random.nextFloat() * (viewSize.x - DEFAULT_RADIUS * 2) + DEFAULT_RADIUS,
+                random.nextFloat() * (viewSize.y - DEFAULT_RADIUS * 2) + DEFAULT_RADIUS);
         this.paint = new Paint();
         this.paint.setStyle(Paint.Style.FILL);
         this.paint.setARGB(255, random.nextInt(200), random.nextInt(200), random.nextInt(200));
-        this.radius = 200;//random.nextFloat() * 50 + 50;
+        this.radius = DEFAULT_RADIUS;
         this.directionX = random.nextBoolean();
         this.directionY = random.nextBoolean();
         path = new Path();
@@ -47,11 +49,17 @@ public class StarItem {
         } else {
             position.y = position.y - speed;
         }
-        if (position.y + radius >= viewSize.y - speed - 2 || position.y - radius <= speed + 2) {
-            directionY = !directionY;
+        if (position.y + radius >= viewSize.y - speed - 2) {
+            directionY = false;
         }
-        if (position.x + radius >= viewSize.x - speed - 2 || position.x - radius <= speed + 2) {
-            directionX = !directionX;
+        if (position.y - radius <= speed + 2) {
+            directionY = true;
+        }
+        if (position.x + radius >= viewSize.x - speed - 2) {
+            directionX = false;
+        }
+        if (position.x - radius <= speed + 2) {
+            directionX = true;
         }
         updateStar();
     } //move
